@@ -1,9 +1,20 @@
-name: hello-world
-description: say Hello World
+name: deployment
+description: create a deployment
 inputs:
-  name:
-    description: example input
+  environment:
+    description: environment name
+    required: false
+  token:
+    description: GitHub token
     required: true
+    default: ${{ github.token }}
+outputs:
+  url:
+    description: url of deployment
+  id:
+    description: id of deployment
+  node-id:
+    description: node id of deployment
 runs:
   using: 'node12'
   main: 'dist/index.js'

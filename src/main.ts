@@ -3,7 +3,8 @@ import { run } from './run'
 
 const main = async (): Promise<void> => {
   await run({
-    name: core.getInput('name', { required: true }),
+    environment: core.getInput('environment') || undefined,
+    token: core.getInput('token', { required: true }),
   })
 }
 
