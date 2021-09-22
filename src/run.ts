@@ -1,11 +1,10 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { inferDeploymentParameters } from './deployment'
+import { DeploymentInputs, inferDeploymentParameters } from './deployment'
 
 type Inputs = {
-  environment?: string
   token: string
-}
+} & DeploymentInputs
 
 export const run = async (inputs: Inputs): Promise<void> => {
   const octokit = github.getOctokit(inputs.token, {

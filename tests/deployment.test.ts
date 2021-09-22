@@ -27,6 +27,33 @@ test('on pull request', () => {
   })
 })
 
+test('on pull request with suffix', () => {
+  const p = inferDeploymentParameters(
+    {
+      eventName: 'pull_request',
+      ref: 'refs/pulls/123/merge',
+      sha: '1234567890abcdef',
+      payload: {
+        number: 123,
+        pull_request: {
+          number: 123,
+          head: {
+            ref: 'headname',
+          },
+        },
+      },
+      workflow: 'test',
+    },
+    { environmentSuffix: '/app1' }
+  )
+  expect(p).toStrictEqual<DeploymentParameters>({
+    ref: 'headname',
+    sha: '1234567890abcdef',
+    environment: 'pr-123/app1',
+    transient_environment: true,
+  })
+})
+
 test('on push branch', () => {
   const p = inferDeploymentParameters(
     {

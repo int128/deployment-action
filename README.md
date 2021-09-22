@@ -36,6 +36,7 @@ It keeps the timeline of pull request clean.
 | Name | Default | Description
 |------|----------|------------
 | `environment` | (inferred from event) | Environment name
+| `environment-suffix` | ` ` | Suffix of environment name
 | `token` | `github.token` | GitHub token
 
 
