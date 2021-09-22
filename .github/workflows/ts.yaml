@@ -37,7 +37,9 @@ jobs:
       - run: yarn package
 
       - uses: ./
+        with:
+          task: deploy backend
 
       - uses: ./
         with:
-          environment-suffix: /frontend
+          task: deploy frontend

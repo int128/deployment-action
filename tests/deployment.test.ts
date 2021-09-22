@@ -17,12 +17,15 @@ test('on pull request', () => {
       },
       workflow: 'test',
     },
-    {}
+    {
+      task: 'deploy',
+    }
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'headname',
     sha: '1234567890abcdef',
     environment: 'pr-123',
+    task: 'deploy',
     transient_environment: true,
   })
 })
@@ -44,12 +47,16 @@ test('on pull request with suffix', () => {
       },
       workflow: 'test',
     },
-    { environmentSuffix: '/app1' }
+    {
+      environmentSuffix: '/app1',
+      task: 'deploy',
+    }
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'headname',
     sha: '1234567890abcdef',
     environment: 'pr-123/app1',
+    task: 'deploy',
     transient_environment: true,
   })
 })
@@ -63,12 +70,15 @@ test('on push branch', () => {
       payload: {},
       workflow: 'test',
     },
-    {}
+    {
+      task: 'deploy',
+    }
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'refs/heads/main',
     sha: '1234567890abcdef',
     environment: 'main',
+    task: 'deploy',
   })
 })
 
@@ -81,12 +91,15 @@ test('on push tag', () => {
       payload: {},
       workflow: 'test',
     },
-    {}
+    {
+      task: 'deploy',
+    }
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'refs/tags/main',
     sha: '1234567890abcdef',
     environment: 'tags/main',
+    task: 'deploy',
   })
 })
 
@@ -99,11 +112,14 @@ test('on schedule', () => {
       payload: {},
       workflow: 'deploy',
     },
-    {}
+    {
+      task: 'deploy',
+    }
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'refs/heads/main',
     sha: '1234567890abcdef',
     environment: 'deploy/schedule',
+    task: 'deploy',
   })
 })

@@ -5,6 +5,7 @@ const main = async (): Promise<void> => {
   await run({
     environment: core.getInput('environment') || undefined,
     environmentSuffix: core.getInput('environment-suffix') || undefined,
+    task: core.getInput('task', { required: true }),
     token: core.getInput('token', { required: true }),
   })
 }

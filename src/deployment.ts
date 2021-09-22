@@ -6,12 +6,14 @@ type PartialContext = Pick<Context, 'eventName' | 'ref' | 'sha' | 'payload' | 'w
 export type DeploymentInputs = {
   environment?: string
   environmentSuffix?: string
+  task: string
 }
 
 export type DeploymentParameters = {
   ref: string
   sha: string
   environment: string
+  task: string
   transient_environment?: boolean
 }
 
@@ -19,11 +21,12 @@ export const inferDeploymentParameters = (context: PartialContext, inputs: Deplo
   const p = infer(context)
   return {
     ...p,
+    task: inputs.task,
     environment: `${inputs.environment ?? p.environment}${inputs.environmentSuffix ?? ''}`,
   }
 }
 
-const infer = (context: PartialContext): DeploymentParameters => {
+const infer = (context: PartialContext) => {
   if (context.eventName == 'pull_request') {
     const payload = context.payload as PullRequestEvent
     return {

@@ -7,6 +7,10 @@ inputs:
   environment-suffix:
     description: suffix of environment name
     required: false
+  task:
+    description: task name
+    required: true
+    default: deploy
   token:
     description: GitHub token
     required: true
