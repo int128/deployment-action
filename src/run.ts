@@ -18,6 +18,7 @@ export const run = async (inputs: Inputs): Promise<void> => {
     repo: github.context.repo.repo,
     environment: p.environment,
   })
+  core.info(`Deleting ${existing.data.length} deployment(s)`)
   await Promise.all(
     existing.data.map(async (deployment) => {
       await octokit.rest.repos.deleteDeployment({

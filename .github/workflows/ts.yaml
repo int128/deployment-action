@@ -36,5 +36,8 @@ jobs:
       - run: yarn build
       - run: yarn package
 
-      - name: e2e-test
-        uses: ./
+      - uses: ./
+
+      - uses: ./
+        with:
+          environment-suffix: /frontend
