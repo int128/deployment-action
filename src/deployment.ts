@@ -1,5 +1,5 @@
 import { Context } from '@actions/github/lib/context'
-import { PullRequestEvent } from '@octokit/webhooks-definitions/schema'
+import { PullRequestEvent } from '@octokit/webhooks-types'
 
 type PartialContext = Pick<Context, 'eventName' | 'ref' | 'sha' | 'payload' | 'workflow'>
 
