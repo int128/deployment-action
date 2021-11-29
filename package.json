@@ -29,8 +29,5 @@
     "ts-jest": "27.0.7",
     "typescript": "4.5.2"
   },
-  "resolutions": {
-    "node-fetch": "3.0.0"
-  },
   "version": "0.0.0"
 }
