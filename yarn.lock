@@ -902,7 +902,7 @@
     "@octokit/types" "^6.34.0"
     deprecation "^2.3.1"
 
-"@octokit/plugin-retry@^3.0.9":
+"@octokit/plugin-retry@3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@octokit/plugin-retry/-/plugin-retry-3.0.9.tgz#ae625cca1e42b0253049102acd71c1d5134788fe"
   integrity sha512-r+fArdP5+TG6l1Rv/C9hVoty6tldw6cE2pRHNGmFPdyfrc696R6JjrQ3d7HdVqGwuzfyrcaLAKD7K8TX8aehUQ==
