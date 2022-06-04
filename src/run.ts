@@ -1,5 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import { getOctokitOptions, GitHub } from '@actions/github/lib/utils'
+import * as pluginRetry from '@octokit/plugin-retry'
 import { RequestError } from '@octokit/request-error'
 import { DeploymentInputs, inferDeploymentParameters } from './deployment'
 
@@ -8,9 +10,8 @@ type Inputs = {
 } & DeploymentInputs
 
 export const run = async (inputs: Inputs): Promise<void> => {
-  const octokit = github.getOctokit(inputs.token, {
-    previews: ['ant-man', 'flash'],
-  })
+  const MyOctokit = GitHub.plugin(pluginRetry.retry)
+  const octokit = new MyOctokit(getOctokitOptions(inputs.token, { previews: ['ant-man', 'flash'] }))
   const p = inferDeploymentParameters(github.context, inputs)
 
   core.info(`Finding previous deployments for environment ${p.environment}`)
