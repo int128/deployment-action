@@ -30,8 +30,8 @@ export const run = async (inputs: Inputs): Promise<void> => {
       })
       core.info(`Deleted deployment ${deployment.url}`)
     } catch (error) {
-      if (error instanceof RequestError && error.status === 422) {
-        core.warning(`unable to delete previous deployment ${deployment.url}: ${error.message}`)
+      if (error instanceof RequestError) {
+        core.warning(`unable to delete previous deployment ${deployment.url}: ${error.status} ${error.message}`)
         continue
       }
       throw error
