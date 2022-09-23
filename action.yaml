@@ -1,5 +1,6 @@
 name: deployment
 description: create a deployment
+
 inputs:
   environment:
     description: environment name
@@ -7,10 +8,17 @@ inputs:
   environment-suffix:
     description: suffix of environment name
     required: false
+  description:
+    description: description of environment
+    required: false
+  task:
+    description: task name of environment
+    required: false
   token:
     description: GitHub token
     required: true
     default: ${{ github.token }}
+
 outputs:
   url:
     description: url of deployment
@@ -18,6 +26,7 @@ outputs:
     description: id of deployment
   node-id:
     description: node id of deployment
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
