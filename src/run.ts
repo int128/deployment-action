@@ -6,6 +6,8 @@ import { RequestError } from '@octokit/request-error'
 import { DeploymentInputs, inferDeploymentParameters } from './deployment'
 
 type Inputs = {
+  description?: string
+  task?: string
   token: string
 } & DeploymentInputs
 
@@ -44,6 +46,8 @@ export const run = async (inputs: Inputs): Promise<void> => {
     repo: github.context.repo.repo,
     auto_merge: false,
     required_contexts: [],
+    description: inputs.description,
+    task: inputs.task,
     ...p,
   })
   if (created.status != 201) {

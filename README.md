@@ -73,7 +73,9 @@ When this action runs on a pull request, it creates a deployment like:
 | Name | Default | Description
 |------|----------|------------
 | `environment` | (inferred from event) | Environment name
-| `environment-suffix` | ` ` | Suffix of environment name
+| `environment-suffix` | (optional) | Suffix of environment name
+| `description` | (optional) | Description of environment
+| `task` | (optional) | Task name of environment
 | `token` | `github.token` | GitHub token
 
 

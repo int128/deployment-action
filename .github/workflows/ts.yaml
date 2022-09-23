@@ -39,3 +39,5 @@ jobs:
       - uses: ./
         with:
           environment-suffix: /frontend
+          description: frontend application
+          task: deploy
