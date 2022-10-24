@@ -15,7 +15,7 @@
     "@octokit/plugin-retry": "3.0.9"
   },
   "devDependencies": {
-    "@octokit/webhooks-types": "6.5.0",
+    "@octokit/webhooks-types": "6.6.0",
     "@tsconfig/node16": "1.0.3",
     "@types/jest": "29.2.0",
     "@types/node": "16.18.0",
