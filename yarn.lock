@@ -973,11 +973,12 @@
     "@octokit/types" "^6.34.0"
     deprecation "^2.3.1"
 
-"@octokit/plugin-retry@4.1.6":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-retry/-/plugin-retry-4.1.6.tgz#e33b1e520f0bd24d515c9901676b55df64dfc795"
-  integrity sha512-obkYzIgEC75r8+9Pnfiiqy3y/x1bc3QLE5B7qvv9wi9Kj0R5tGQFC6QMBg1154WQ9lAVypuQDGyp3hNpp15gQQ==
+"@octokit/plugin-retry@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-retry/-/plugin-retry-5.0.3.tgz#19012e882fd8bf9d55a9c455e8572bbcabf7973f"
+  integrity sha512-Lc2zM9J4LdWHq+Nb5U1Jl+7DJmnrtZBPDT8gNFE1wlEqQ18GWX2ohmUb82mxysAPHAtiszEv2fdewCqTzQyUhw==
   dependencies:
+    "@octokit/request-error" "^4.0.1"
     "@octokit/types" "^9.0.0"
     bottleneck "^2.15.3"
 
@@ -987,6 +988,15 @@
   integrity sha512-1VIvgXxs9WHSjicsRwq8PlR2LR2x6DwsJAaFgzdi0JfJoGSO8mYI/cHJQ+9FbN21aa+DrgNLnwObmyeSC8Rmpg==
   dependencies:
     "@octokit/types" "^6.0.3"
+    deprecation "^2.0.0"
+    once "^1.4.0"
+
+"@octokit/request-error@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@octokit/request-error/-/request-error-4.0.1.tgz#6278255ade55a04aab59327c4e1359290523c39f"
+  integrity sha512-DBTkqzs0K6SlK1gRaQ6A6yOnKKkbVy8n/A9E7Es5qYONIxBghqiETPqWhG9l7qvWgp8v3sDkB8vlV2AAX1N6gw==
+  dependencies:
+    "@octokit/types" "^9.0.0"
     deprecation "^2.0.0"
     once "^1.4.0"
 
