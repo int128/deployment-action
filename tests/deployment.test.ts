@@ -17,7 +17,7 @@ test('on pull request', () => {
       },
       workflow: 'test',
     },
-    {}
+    {},
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'headname',
@@ -44,7 +44,7 @@ test('on pull request with suffix', () => {
       },
       workflow: 'test',
     },
-    { environmentSuffix: '/app1' }
+    { environmentSuffix: '/app1' },
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'headname',
@@ -63,7 +63,7 @@ test('on push branch', () => {
       payload: {},
       workflow: 'test',
     },
-    {}
+    {},
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'refs/heads/main',
@@ -81,7 +81,7 @@ test('on push tag', () => {
       payload: {},
       workflow: 'test',
     },
-    {}
+    {},
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'refs/tags/main',
@@ -99,7 +99,7 @@ test('on schedule', () => {
       payload: {},
       workflow: 'deploy',
     },
-    {}
+    {},
   )
   expect(p).toStrictEqual<DeploymentParameters>({
     ref: 'refs/heads/main',
