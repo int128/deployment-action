@@ -936,11 +936,6 @@
     "@octokit/types" "^12.0.0"
     universal-user-agent "^6.0.0"
 
-"@octokit/openapi-types@^16.0.0":
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-16.0.0.tgz#d92838a6cd9fb4639ca875ddb3437f1045cc625e"
-  integrity sha512-JbFWOqTJVLHZSUUoF4FzAZKYtqdxWu9Z5m2QQnOyEa04fOFljvyh7D3GYKbfuaSWisqehImiVIMG4eyJeP5VEA==
-
 "@octokit/openapi-types@^19.0.0":
   version "19.0.0"
   resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-19.0.0.tgz#0101bf62ab14c1946149a0f8385440963e1253c4"
@@ -960,12 +955,13 @@
   dependencies:
     "@octokit/types" "^12.0.0"
 
-"@octokit/plugin-retry@4.1.6":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-retry/-/plugin-retry-4.1.6.tgz#e33b1e520f0bd24d515c9901676b55df64dfc795"
-  integrity sha512-obkYzIgEC75r8+9Pnfiiqy3y/x1bc3QLE5B7qvv9wi9Kj0R5tGQFC6QMBg1154WQ9lAVypuQDGyp3hNpp15gQQ==
+"@octokit/plugin-retry@6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-retry/-/plugin-retry-6.0.1.tgz#3257404f7cc418e1c1f13a7f2012c1db848b7693"
+  integrity sha512-SKs+Tz9oj0g4p28qkZwl/topGcb0k0qPNX/i7vBKmDsjoeqnVfFUquqrE/O9oJY7+oLzdCtkiWSXLpLjvl6uog==
   dependencies:
-    "@octokit/types" "^9.0.0"
+    "@octokit/request-error" "^5.0.0"
+    "@octokit/types" "^12.0.0"
     bottleneck "^2.15.3"
 
 "@octokit/request-error@^5.0.0":
@@ -995,17 +991,10 @@
   dependencies:
     "@octokit/openapi-types" "^19.0.0"
 
-"@octokit/types@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-9.0.0.tgz#6050db04ddf4188ec92d60e4da1a2ce0633ff635"
-  integrity sha512-LUewfj94xCMH2rbD5YJ+6AQ4AVjFYTgpp6rboWM5T7N3IsIF65SBEOVcYMGAEzO/kKNiNaW4LoWtoThOhH06gw==
-  dependencies:
-    "@octokit/openapi-types" "^16.0.0"
-
-"@octokit/webhooks-types@6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-6.11.0.tgz#1fb903bff3f2883490d6ba88d8cb8f8a55f68176"
-  integrity sha512-AanzbulOHljrku1NGfafxdpTCfw2ENaWzH01N2vqQM+cUFbk868Cgh0xylz0JIM9BoKbfI++bdD6EYX0Q/UTEw==
+"@octokit/webhooks-types@7.3.1":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-7.3.1.tgz#bbf259ba1a4d623cbc300096e84d6f07f3095688"
+  integrity sha512-u6355ZsZnHwmxen30SrqnYb1pXieBFkYgkNzt+Ed4Ao5tupN1OErHfzwiV6hq6duGkDAYASbq7/uVJQ69PjLEg==
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.19"
