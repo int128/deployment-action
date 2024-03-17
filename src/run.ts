@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { getOctokitOptions, GitHub } from '@actions/github/lib/utils'
 import * as pluginRetry from '@octokit/plugin-retry'
 import { DeploymentInputs, inferDeploymentParameters } from './deployment'
+import assert from 'assert'
 
 type Inputs = {
   description?: string
@@ -10,16 +10,21 @@ type Inputs = {
   token: string
 } & DeploymentInputs
 
-export const run = async (inputs: Inputs): Promise<void> => {
-  const MyOctokit = GitHub.plugin(pluginRetry.retry)
-  const octokit = new MyOctokit(getOctokitOptions(inputs.token, { previews: ['ant-man', 'flash'] }))
-  const p = inferDeploymentParameters(github.context, inputs)
+type Outputs = {
+  url: string
+  id: number
+  nodeId: string
+}
 
-  core.info(`Finding previous deployments for environment ${p.environment}`)
+export const run = async (inputs: Inputs): Promise<Outputs> => {
+  const octokit = github.getOctokit(inputs.token, { previews: ['ant-man', 'flash'] }, pluginRetry.retry)
+  const params = inferDeploymentParameters(github.context, inputs)
+
+  core.info(`Finding previous deployments for environment ${params.environment}`)
   const previous = await octokit.rest.repos.listDeployments({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    environment: p.environment,
+    environment: params.environment,
   })
   core.info(`Deleting previous ${previous.data.length} deployment(s)`)
   for (const deployment of previous.data) {
@@ -32,14 +37,14 @@ export const run = async (inputs: Inputs): Promise<void> => {
       core.info(`Deleted deployment ${deployment.url}`)
     } catch (error) {
       if (isRequestError(error)) {
-        core.warning(`unable to delete previous deployment ${deployment.url}: ${error.status} ${error.message}`)
+        core.warning(`Unable to delete previous deployment ${deployment.url}: ${error.status} ${error.message}`)
         continue
       }
       throw error
     }
   }
 
-  core.info(`Creating deployment for environment=${p.environment}, ref=${p.ref}, sha=${p.sha}`)
+  core.info(`Creating deployment for environment=${params.environment}, ref=${params.ref}, sha=${params.sha}`)
   const created = await octokit.rest.repos.createDeployment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
@@ -47,15 +52,15 @@ export const run = async (inputs: Inputs): Promise<void> => {
     required_contexts: [],
     description: inputs.description,
     task: inputs.task,
-    ...p,
+    ...params,
   })
-  if (created.status != 201) {
-    throw new Error(`unexpected response status ${created.status}`)
-  }
+  assert(created.status === 201)
   core.info(`Created deployment ${created.data.url}`)
-  core.setOutput('url', created.data.url)
-  core.setOutput('id', created.data.id)
-  core.setOutput('node-id', created.data.node_id)
+  return {
+    url: created.data.url,
+    id: created.data.id,
+    nodeId: created.data.node_id,
+  }
 }
 
 type RequestError = Error & { status: number }
