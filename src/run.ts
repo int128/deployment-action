@@ -2,7 +2,6 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { getOctokitOptions, GitHub } from '@actions/github/lib/utils'
 import * as pluginRetry from '@octokit/plugin-retry'
-import { RequestError } from '@octokit/request-error'
 import { DeploymentInputs, inferDeploymentParameters } from './deployment'
 
 type Inputs = {
@@ -32,7 +31,7 @@ export const run = async (inputs: Inputs): Promise<void> => {
       })
       core.info(`Deleted deployment ${deployment.url}`)
     } catch (error) {
-      if (error instanceof RequestError) {
+      if (isRequestError(error)) {
         core.warning(`unable to delete previous deployment ${deployment.url}: ${error.status} ${error.message}`)
         continue
       }
@@ -58,3 +57,8 @@ export const run = async (inputs: Inputs): Promise<void> => {
   core.setOutput('id', created.data.id)
   core.setOutput('node-id', created.data.node_id)
 }
+
+type RequestError = Error & { status: number }
+
+const isRequestError = (error: unknown): error is RequestError =>
+  error instanceof Error && 'status' in error && typeof error.status === 'number'
