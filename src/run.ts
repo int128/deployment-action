@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as pluginRetry from '@octokit/plugin-retry'
-import { DeploymentInputs, inferDeploymentParameters } from './deployment'
+import { DeploymentInputs, inferDeploymentParameters } from './deployment.js'
 import assert from 'assert'
 
 type Inputs = {

@@ -1,7 +1,7 @@
-import { Context } from '@actions/github/lib/context'
+import * as github from '@actions/github'
 import { PullRequestEvent } from '@octokit/webhooks-types'
 
-type PartialContext = Pick<Context, 'eventName' | 'ref' | 'sha' | 'payload' | 'workflow'>
+type PartialContext = Pick<typeof github.context, 'eventName' | 'ref' | 'sha' | 'payload' | 'workflow'>
 
 export type DeploymentInputs = {
   environment?: string
