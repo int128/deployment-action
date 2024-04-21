@@ -1,4 +1,4 @@
-import { DeploymentParameters, inferDeploymentParameters } from '../src/deployment'
+import { DeploymentParameters, inferDeploymentParameters } from '../src/deployment.js'
 
 test('on pull request', () => {
   const p = inferDeploymentParameters(
