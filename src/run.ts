@@ -20,13 +20,13 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   const octokit = github.getOctokit(inputs.token, { previews: ['ant-man', 'flash'] }, pluginRetry.retry)
   const params = inferDeploymentParameters(github.context, inputs)
 
-  core.info(`Finding previous deployments for environment ${params.environment}`)
+  core.info(`Finding the previous deployments of the environment ${params.environment}`)
   const previous = await octokit.rest.repos.listDeployments({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     environment: params.environment,
   })
-  core.info(`Deleting previous ${previous.data.length} deployment(s)`)
+  core.info(`Found ${previous.data.length} deployment(s)`)
   for (const deployment of previous.data) {
     try {
       await octokit.rest.repos.deleteDeployment({
@@ -34,17 +34,17 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
         repo: github.context.repo.repo,
         deployment_id: deployment.id,
       })
-      core.info(`Deleted deployment ${deployment.url}`)
+      core.info(`Deleted the previous deployment ${deployment.url}`)
     } catch (error) {
       if (isRequestError(error)) {
-        core.warning(`Unable to delete previous deployment ${deployment.url}: ${error.status} ${error.message}`)
+        core.warning(`Unable to delete the previous deployment ${deployment.url}: ${error.status} ${error.message}`)
         continue
       }
       throw error
     }
   }
 
-  core.info(`Creating deployment for environment=${params.environment}, ref=${params.ref}, sha=${params.sha}`)
+  core.info(`Creating a deployment of the environment ${params.environment} at ref=${params.ref}, sha=${params.sha}`)
   const created = await octokit.rest.repos.createDeployment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
@@ -55,7 +55,7 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
     ...params,
   })
   assert(created.status === 201)
-  core.info(`Created deployment ${created.data.url}`)
+  core.info(`Created a deployment ${created.data.url}`)
   return {
     url: created.data.url,
     id: created.data.id,

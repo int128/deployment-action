@@ -3,7 +3,6 @@
 This is an action to create a [GitHub Deployment](https://docs.github.com/en/rest/deployments/deployments).
 It is designed to work with an external deployment system, such as Jenkins, Spinnaker or Argo CD.
 
-
 ## Getting Started
 
 To create a deployment:
@@ -16,7 +15,7 @@ jobs:
       - uses: int128/deployment-action@v1
         id: deployment
 
-      # trigger a deploy on your system
+      # Trigger a deploy on your system
       - run: ./deploy.sh
         env:
           DEPLOYMENT_URL: ${{ steps.deployment.outputs.url }}
@@ -63,26 +62,24 @@ jobs:
           environment-suffix: /api
 ```
 
-When this action runs on a pull request, it creates a deployment like:
+When this action runs on a pull request event, it creates a deployment like:
 
 <img width="680" alt="image" src="https://user-images.githubusercontent.com/321266/191874535-d0057273-be35-4828-9b84-99ba5414ddb6.png">
 
-
 ## Inputs
 
-| Name | Default | Description
-|------|----------|------------
-| `environment` | (inferred from event) | Environment name
-| `environment-suffix` | (optional) | Suffix of environment name
-| `description` | (optional) | Description of environment
-| `task` | (optional) | Task name of environment
-| `token` | `github.token` | GitHub token
-
+| Name                 | Default               | Description                |
+| -------------------- | --------------------- | -------------------------- |
+| `environment`        | (inferred from event) | Environment name           |
+| `environment-suffix` | (optional)            | Suffix of environment name |
+| `description`        | (optional)            | Description of environment |
+| `task`               | (optional)            | Task name of environment   |
+| `token`              | `github.token`        | GitHub token               |
 
 ## Outputs
 
-| Name | Description
-|------|------------
-| `url` | Deployment URL
-| `id` | Deployment ID (for REST)
-| `node-id` | Deployment ID (for GraphQL)
+| Name      | Description                 |
+| --------- | --------------------------- |
+| `url`     | Deployment URL              |
+| `id`      | Deployment ID (for REST)    |
+| `node-id` | Deployment ID (for GraphQL) |
