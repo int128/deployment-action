@@ -62,14 +62,15 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   //   1 abandoned deployment
   //
   // To avoid this, set the deployment status to inactive immediately.
-  core.info(`Setting the deployment status to inactive`)
+  const initialState = 'inactive'
+  core.info(`Setting the deployment status to ${initialState}`)
   await octokit.rest.repos.createDeploymentStatus({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     deployment_id: created.data.id,
-    state: 'inactive',
+    state: initialState,
   })
-  core.info(`Set the deployment status to inactive`)
+  core.info(`Set the deployment status to ${initialState}`)
 
   return {
     url: created.data.url,
