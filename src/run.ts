@@ -56,6 +56,21 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   })
   assert(created.status === 201)
   core.info(`Created a deployment ${created.data.url}`)
+
+  // If the deployment is not deployed for a while, GitHub will show the below error.
+  //   This branch had an error being deployed
+  //   1 abandoned deployment
+  //
+  // To avoid this, set the deployment status to inactive immediately.
+  core.info(`Setting the deployment status to inactive`)
+  await octokit.rest.repos.createDeploymentStatus({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    deployment_id: created.data.id,
+    state: 'inactive',
+  })
+  core.info(`Set the deployment status to inactive`)
+
   return {
     url: created.data.url,
     id: created.data.id,
