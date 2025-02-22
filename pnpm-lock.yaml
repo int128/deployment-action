@@ -55,7 +55,7 @@ importers:
         specifier: 8.24.1
         version: 8.24.1(eslint@9.21.0)(typescript@5.7.3)
       vitest:
-        specifier: ^3.0.6
+        specifier: 3.0.6
         version: 3.0.6(@types/node@20.17.19)
 
 packages:
@@ -1478,7 +1478,7 @@ snapshots:
       '@typescript-eslint/types': 8.24.1
       '@typescript-eslint/typescript-estree': 8.24.1(typescript@5.7.3)
       '@typescript-eslint/visitor-keys': 8.24.1
-      debug: 4.3.4
+      debug: 4.4.0
       eslint: 9.21.0
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -1493,7 +1493,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.24.1(typescript@5.7.3)
       '@typescript-eslint/utils': 8.24.1(eslint@9.21.0)(typescript@5.7.3)
-      debug: 4.3.4
+      debug: 4.4.0
       eslint: 9.21.0
       ts-api-utils: 2.0.1(typescript@5.7.3)
       typescript: 5.7.3
@@ -1506,7 +1506,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.24.1
       '@typescript-eslint/visitor-keys': 8.24.1
-      debug: 4.3.4
+      debug: 4.4.0
       fast-glob: 3.3.2
       is-glob: 4.0.3
       minimatch: 9.0.4
