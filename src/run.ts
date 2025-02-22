@@ -1,13 +1,12 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
-import * as pluginRetry from '@octokit/plugin-retry'
+import * as github from './github.js'
 import { DeploymentInputs, inferDeploymentParameters } from './deployment.js'
 import assert from 'assert'
+import { Octokit } from '@octokit/action'
 
 type Inputs = {
   description?: string
   task?: string
-  token: string
 } & DeploymentInputs
 
 type Outputs = {
@@ -16,22 +15,21 @@ type Outputs = {
   nodeId: string
 }
 
-export const run = async (inputs: Inputs): Promise<Outputs> => {
-  const octokit = github.getOctokit(inputs.token, { previews: ['ant-man', 'flash'] }, pluginRetry.retry)
-  const params = inferDeploymentParameters(github.context, inputs)
+export const run = async (inputs: Inputs, context: github.Context, octokit: Octokit): Promise<Outputs> => {
+  const params = inferDeploymentParameters(context, inputs)
 
   core.info(`Finding the previous deployments of the environment ${params.environment}`)
   const previous = await octokit.rest.repos.listDeployments({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    owner: context.repo.owner,
+    repo: context.repo.repo,
     environment: params.environment,
   })
   core.info(`Found ${previous.data.length} deployment(s)`)
   for (const deployment of previous.data) {
     try {
       await octokit.rest.repos.deleteDeployment({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         deployment_id: deployment.id,
       })
       core.info(`Deleted the previous deployment ${deployment.url}`)
@@ -46,8 +44,8 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
 
   core.info(`Creating a deployment of the environment ${params.environment} at ref=${params.ref}, sha=${params.sha}`)
   const created = await octokit.rest.repos.createDeployment({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    owner: context.repo.owner,
+    repo: context.repo.repo,
     auto_merge: false,
     required_contexts: [],
     description: inputs.description,
@@ -65,8 +63,8 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   const initialState = 'inactive'
   core.info(`Setting the deployment status to ${initialState}`)
   await octokit.rest.repos.createDeploymentStatus({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    owner: context.repo.owner,
+    repo: context.repo.repo,
     deployment_id: created.data.id,
     state: initialState,
   })

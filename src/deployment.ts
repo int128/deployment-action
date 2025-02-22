@@ -1,7 +1,13 @@
-import * as github from '@actions/github'
-import { PullRequestEvent } from '@octokit/webhooks-types'
+import { Context } from './github.js'
 
-type PartialContext = Pick<typeof github.context, 'eventName' | 'ref' | 'sha' | 'payload' | 'workflow'>
+type PullRequestPayload = {
+  pull_request: {
+    number: number
+    head: {
+      ref: string
+    }
+  }
+}
 
 export type DeploymentInputs = {
   environment?: string
@@ -15,7 +21,7 @@ export type DeploymentParameters = {
   transient_environment?: boolean
 }
 
-export const inferDeploymentParameters = (context: PartialContext, inputs: DeploymentInputs): DeploymentParameters => {
+export const inferDeploymentParameters = (context: Context, inputs: DeploymentInputs): DeploymentParameters => {
   const p = infer(context)
   return {
     ...p,
@@ -23,14 +29,14 @@ export const inferDeploymentParameters = (context: PartialContext, inputs: Deplo
   }
 }
 
-const infer = (context: PartialContext): DeploymentParameters => {
-  if (context.eventName == 'pull_request') {
-    const payload = context.payload as PullRequestEvent
+const infer = (context: Context): DeploymentParameters => {
+  if (context.eventName === 'pull_request') {
+    const payload = context.payload as PullRequestPayload
     return {
       // set the head ref to associate a deployment with the pull request
       ref: payload.pull_request.head.ref,
       sha: context.sha,
-      environment: `pr-${payload.number}`,
+      environment: `pr-${payload.pull_request.number}`,
       transient_environment: true,
     }
   }
