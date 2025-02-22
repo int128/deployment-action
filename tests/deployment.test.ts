@@ -1,6 +1,7 @@
+import { it, expect } from 'vitest'
 import { DeploymentParameters, inferDeploymentParameters } from '../src/deployment.js'
 
-test('on pull request', () => {
+it('returns the pull request number', () => {
   const p = inferDeploymentParameters(
     {
       eventName: 'pull_request',
@@ -27,7 +28,7 @@ test('on pull request', () => {
   })
 })
 
-test('on pull request with suffix', () => {
+it('returns the pull request number with suffix', () => {
   const p = inferDeploymentParameters(
     {
       eventName: 'pull_request',
@@ -54,7 +55,7 @@ test('on pull request with suffix', () => {
   })
 })
 
-test('on push branch', () => {
+it('returns the pushed branch', () => {
   const p = inferDeploymentParameters(
     {
       eventName: 'push',
@@ -72,7 +73,7 @@ test('on push branch', () => {
   })
 })
 
-test('on push tag', () => {
+it('returned the pushed tag', () => {
   const p = inferDeploymentParameters(
     {
       eventName: 'push',
@@ -90,7 +91,7 @@ test('on push tag', () => {
   })
 })
 
-test('on schedule', () => {
+it('returns the current branch on schedule event', () => {
   const p = inferDeploymentParameters(
     {
       eventName: 'schedule',
