@@ -21,6 +21,9 @@ importers:
       '@octokit/action':
         specifier: ^7.0.1
         version: 7.0.1
+      '@octokit/webhooks-types':
+        specifier: 7.6.1
+        version: 7.6.1
       '@tsconfig/node20':
         specifier: 20.1.4
         version: 20.1.4
@@ -357,6 +360,9 @@ packages:
 
   '@octokit/types@13.8.0':
     resolution: {integrity: sha512-x7DjTIbEpEWXK99DMd01QfWy0hd5h4EN+Q7shkdKds3otGQP+oWE/y0A76i1OvH9fygo4ddvNf7ZvF0t78P98A==}
+
+  '@octokit/webhooks-types@7.6.1':
+    resolution: {integrity: sha512-S8u2cJzklBC0FgTwWVLaM8tMrDuDMVE4xiTK4EYXM9GntyvrdbSoxqDQa+Fh57CCNApyIpyeqPhhFEmHPfrXgw==}
 
   '@rollup/rollup-android-arm-eabi@4.34.8':
     resolution: {integrity: sha512-q217OSE8DTp8AFHuNHXo0Y86e1wtlfVrXiAlwkIvGRQv9zbc6mE3sjIVfwI8sYUyNxwOg0j/Vm1RKM04JcWLJw==}
@@ -1380,6 +1386,8 @@ snapshots:
   '@octokit/types@13.8.0':
     dependencies:
       '@octokit/openapi-types': 23.0.1
+
+  '@octokit/webhooks-types@7.6.1': {}
 
   '@rollup/rollup-android-arm-eabi@4.34.8':
     optional: true
