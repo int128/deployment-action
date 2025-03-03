@@ -4,11 +4,11 @@ import { DeploymentParameters, inferDeploymentParameters } from '../src/deployme
 it('returns the pull request number', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
       sha: '1234567890abcdef',
       payload: {
-        number: 123,
         pull_request: {
           number: 123,
           head: {
@@ -31,11 +31,11 @@ it('returns the pull request number', () => {
 it('returns the pull request number with suffix', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
       sha: '1234567890abcdef',
       payload: {
-        number: 123,
         pull_request: {
           number: 123,
           head: {
@@ -58,6 +58,7 @@ it('returns the pull request number with suffix', () => {
 it('returns the pushed branch', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
@@ -76,6 +77,7 @@ it('returns the pushed branch', () => {
 it('returned the pushed tag', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/tags/main',
       sha: '1234567890abcdef',
@@ -94,6 +96,7 @@ it('returned the pushed tag', () => {
 it('returns the current branch on schedule event', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'schedule',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
