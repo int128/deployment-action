@@ -1,8 +1,8 @@
+import assert from 'assert'
 import * as core from '@actions/core'
 import * as github from './github.js'
-import { DeploymentInputs, inferDeploymentParameters } from './deployment.js'
-import assert from 'assert'
 import { Octokit } from '@octokit/action'
+import { DeploymentInputs, inferDeploymentParameters } from './deployment.js'
 
 type Inputs = {
   description?: string
