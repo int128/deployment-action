@@ -1,26 +1,16 @@
+import assert from 'assert'
+import * as core from '@actions/core'
 import * as github from './github.js'
+import { Octokit } from '@octokit/action'
 
-export type DeploymentInputs = {
-  environment?: string
-  environmentSuffix?: string
-}
-
-export type DeploymentParameters = {
+export type DeploymentRequest = {
   ref: string
   sha: string
   environment: string
   transient_environment?: boolean
 }
 
-export const inferDeploymentParameters = (context: github.Context, inputs: DeploymentInputs): DeploymentParameters => {
-  const p = infer(context)
-  return {
-    ...p,
-    environment: `${inputs.environment ?? p.environment}${inputs.environmentSuffix ?? ''}`,
-  }
-}
-
-const infer = (context: github.Context): DeploymentParameters => {
+export const inferDeploymentFromContext = (context: github.Context): DeploymentRequest => {
   if ('pull_request' in context.payload) {
     return {
       // set the head ref to associate a deployment with the pull request
@@ -45,3 +35,82 @@ const infer = (context: github.Context): DeploymentParameters => {
     environment: `${context.workflow}/${context.eventName}`,
   }
 }
+
+type DeleteExistingDeployments = {
+  owner: string
+  repo: string
+  environment: string
+}
+
+export const deleteExistingDeployments = async (req: DeleteExistingDeployments, octokit: Octokit) => {
+  core.info(`Finding the deployments of ${req.environment}`)
+  const deployments = await octokit.rest.repos.listDeployments({
+    owner: req.owner,
+    repo: req.repo,
+    environment: req.environment,
+  })
+
+  core.info(`Deleting ${deployments.data.length} deployments`)
+  for (const deployment of deployments.data) {
+    try {
+      await octokit.rest.repos.deleteDeployment({
+        owner: req.owner,
+        repo: req.repo,
+        deployment_id: deployment.id,
+      })
+      core.info(`Deleted the deployment: ${deployment.url}`)
+    } catch (error) {
+      if (isRequestError(error)) {
+        core.warning(`Unable to delete the deployment: ${deployment.url}: ${error.status} ${error.message}`)
+        continue
+      }
+      throw error
+    }
+  }
+}
+
+type CreateDeployment = {
+  owner: string
+  repo: string
+  ref: string
+  sha: string
+  environment: string
+  transient_environment?: boolean
+  description?: string
+  task?: string
+  initialState: 'inactive'
+}
+
+export const createDeployment = async (deployment: CreateDeployment, octokit: Octokit) => {
+  core.info(`Creating a deployment: ${JSON.stringify(deployment, undefined, 2)}`)
+  const created = await octokit.rest.repos.createDeployment({
+    owner: deployment.owner,
+    repo: deployment.repo,
+    ref: deployment.ref,
+    sha: deployment.sha,
+    environment: deployment.environment,
+    transient_environment: deployment.transient_environment,
+    description: deployment.description,
+    task: deployment.task,
+    auto_merge: false,
+    required_contexts: [],
+  })
+  assert(created.status === 201)
+  core.info(`Created a deployment: ${created.data.url}`)
+
+  core.info(`Setting the deployment status to ${deployment.initialState}`)
+  const { data: deploymentStatus } = await octokit.rest.repos.createDeploymentStatus({
+    owner: deployment.owner,
+    repo: deployment.repo,
+    deployment_id: created.data.id,
+    state: deployment.initialState,
+  })
+  core.info(`Created a deployment status: ${deploymentStatus.url}`)
+
+  return created.data
+}
+
+type RequestError = Error & { status: number }
+
+const isRequestError = (error: unknown): error is RequestError =>
+  error instanceof Error && 'status' in error && typeof error.status === 'number'

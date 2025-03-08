@@ -1,12 +1,12 @@
-import { it, expect } from 'vitest'
+import { it, expect, describe } from 'vitest'
 import { WebhookEvent } from '@octokit/webhooks-types'
-import { DeploymentParameters, inferDeploymentParameters } from '../src/deployment.js'
+import { DeploymentRequest, inferDeploymentFromContext } from '../src/deployment.js'
 
 const partialPayloadForTest = (payload: object) => payload as WebhookEvent
 
-it('returns the pull request number', () => {
-  const p = inferDeploymentParameters(
-    {
+describe('inferDeploymentFromContext', () => {
+  it('returns the pull request number', () => {
+    const p = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
@@ -20,97 +20,60 @@ it('returns the pull request number', () => {
         },
       }),
       workflow: 'test',
-    },
-    {},
-  )
-  expect(p).toStrictEqual<DeploymentParameters>({
-    ref: 'headname',
-    sha: '1234567890abcdef',
-    environment: 'pr-123',
-    transient_environment: true,
-  })
-})
-
-it('returns the pull request number with suffix', () => {
-  const p = inferDeploymentParameters(
-    {
-      repo: { owner: 'owner', repo: 'repo' },
-      eventName: 'pull_request',
-      ref: 'refs/pulls/123/merge',
+    })
+    expect(p).toStrictEqual<DeploymentRequest>({
+      ref: 'headname',
       sha: '1234567890abcdef',
-      payload: partialPayloadForTest({
-        pull_request: {
-          number: 123,
-          head: {
-            ref: 'headname',
-          },
-        },
-      }),
-      workflow: 'test',
-    },
-    { environmentSuffix: '/app1' },
-  )
-  expect(p).toStrictEqual<DeploymentParameters>({
-    ref: 'headname',
-    sha: '1234567890abcdef',
-    environment: 'pr-123/app1',
-    transient_environment: true,
+      environment: 'pr-123',
+      transient_environment: true,
+    })
   })
-})
 
-it('returns the pushed branch', () => {
-  const p = inferDeploymentParameters(
-    {
+  it('returns the pushed branch', () => {
+    const p = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
       payload: partialPayloadForTest({}),
       workflow: 'test',
-    },
-    {},
-  )
-  expect(p).toStrictEqual<DeploymentParameters>({
-    ref: 'refs/heads/main',
-    sha: '1234567890abcdef',
-    environment: 'main',
+    })
+    expect(p).toStrictEqual<DeploymentRequest>({
+      ref: 'refs/heads/main',
+      sha: '1234567890abcdef',
+      environment: 'main',
+    })
   })
-})
 
-it('returned the pushed tag', () => {
-  const p = inferDeploymentParameters(
-    {
+  it('returned the pushed tag', () => {
+    const p = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/tags/main',
       sha: '1234567890abcdef',
       payload: partialPayloadForTest({}),
       workflow: 'test',
-    },
-    {},
-  )
-  expect(p).toStrictEqual<DeploymentParameters>({
-    ref: 'refs/tags/main',
-    sha: '1234567890abcdef',
-    environment: 'tags/main',
+    })
+    expect(p).toStrictEqual<DeploymentRequest>({
+      ref: 'refs/tags/main',
+      sha: '1234567890abcdef',
+      environment: 'tags/main',
+    })
   })
-})
 
-it('returns the current branch on schedule event', () => {
-  const p = inferDeploymentParameters(
-    {
+  it('returns the current branch on schedule event', () => {
+    const p = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'schedule',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
       payload: partialPayloadForTest({}),
       workflow: 'deploy',
-    },
-    {},
-  )
-  expect(p).toStrictEqual<DeploymentParameters>({
-    ref: 'refs/heads/main',
-    sha: '1234567890abcdef',
-    environment: 'deploy/schedule',
+    })
+    expect(p).toStrictEqual<DeploymentRequest>({
+      ref: 'refs/heads/main',
+      sha: '1234567890abcdef',
+      environment: 'deploy/schedule',
+    })
   })
 })
