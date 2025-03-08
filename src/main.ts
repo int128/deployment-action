@@ -10,8 +10,8 @@ const main = async (): Promise<void> => {
       description: core.getInput('description') || undefined,
       task: core.getInput('task') || undefined,
     },
-    await github.getContext(),
     github.getOctokit(),
+    await github.getContext(),
   )
   core.info(`Setting outputs: ${JSON.stringify(outputs, undefined, 2)}`)
   core.setOutput('url', outputs.url)

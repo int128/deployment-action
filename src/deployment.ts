@@ -1,5 +1,4 @@
 import { Context } from './github.js'
-import * as webhook from '@octokit/webhooks-types'
 
 export type DeploymentInputs = {
   environment?: string
@@ -22,13 +21,12 @@ export const inferDeploymentParameters = (context: Context, inputs: DeploymentIn
 }
 
 const infer = (context: Context): DeploymentParameters => {
-  if (context.eventName === 'pull_request') {
-    const payload = context.payload as webhook.PullRequestEvent
+  if ('pull_request' in context.payload) {
     return {
       // set the head ref to associate a deployment with the pull request
-      ref: payload.pull_request.head.ref,
+      ref: context.payload.pull_request.head.ref,
       sha: context.sha,
-      environment: `pr-${payload.pull_request.number}`,
+      environment: `pr-${context.payload.pull_request.number}`,
       transient_environment: true,
     }
   }

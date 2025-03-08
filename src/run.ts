@@ -15,7 +15,7 @@ type Outputs = {
   nodeId: string
 }
 
-export const run = async (inputs: Inputs, context: github.Context, octokit: Octokit): Promise<Outputs> => {
+export const run = async (inputs: Inputs, octokit: Octokit, context: github.Context): Promise<Outputs> => {
   const params = inferDeploymentParameters(context, inputs)
 
   core.info(`Finding the previous deployments of the environment ${params.environment}`)
