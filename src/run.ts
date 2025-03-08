@@ -29,6 +29,13 @@ export const run = async (inputs: Inputs, octokit: Octokit, context: github.Cont
     octokit,
   )
 
+  // If the deployment is not deployed for a while, GitHub will show the below error.
+  //   This branch had an error being deployed
+  //   1 abandoned deployment
+  //
+  // To avoid this, set the deployment status to inactive immediately.
+  const initialState = 'inactive'
+
   const created = await createDeployment(
     {
       owner: context.repo.owner,
@@ -39,12 +46,7 @@ export const run = async (inputs: Inputs, octokit: Octokit, context: github.Cont
       transient_environment: deployment.transient_environment,
       description: inputs.description,
       task: inputs.task,
-      // If the deployment is not deployed for a while, GitHub will show the below error.
-      //   This branch had an error being deployed
-      //   1 abandoned deployment
-      //
-      // To avoid this, set the deployment status to inactive immediately.
-      initialState: 'inactive',
+      state: initialState,
     },
     octokit,
   )

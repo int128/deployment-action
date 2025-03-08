@@ -1,7 +1,7 @@
 import assert from 'assert'
 import * as core from '@actions/core'
 import * as github from './github.js'
-import { Octokit } from '@octokit/action'
+import { Octokit, RestEndpointMethodTypes } from '@octokit/action'
 
 export type DeploymentRequest = {
   ref: string
@@ -78,7 +78,7 @@ type CreateDeployment = {
   transient_environment?: boolean
   description?: string
   task?: string
-  initialState: 'inactive'
+  state: RestEndpointMethodTypes['repos']['createDeploymentStatus']['parameters']['state']
 }
 
 export const createDeployment = async (deployment: CreateDeployment, octokit: Octokit) => {
@@ -98,12 +98,12 @@ export const createDeployment = async (deployment: CreateDeployment, octokit: Oc
   assert(created.status === 201)
   core.info(`Created a deployment: ${created.data.url}`)
 
-  core.info(`Setting the deployment status to ${deployment.initialState}`)
+  core.info(`Setting the deployment status to ${deployment.state}`)
   const { data: deploymentStatus } = await octokit.rest.repos.createDeploymentStatus({
     owner: deployment.owner,
     repo: deployment.repo,
     deployment_id: created.data.id,
-    state: deployment.initialState,
+    state: deployment.state,
   })
   core.info(`Created a deployment status: ${deploymentStatus.url}`)
 
