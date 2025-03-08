@@ -24,7 +24,7 @@ export const run = async (inputs: Inputs, octokit: Octokit, context: github.Cont
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
-      environment,
+      environment: environment,
     },
     octokit,
   )
@@ -33,12 +33,12 @@ export const run = async (inputs: Inputs, octokit: Octokit, context: github.Cont
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
-      environment,
+      environment: environment,
       ref: deployment.ref,
       sha: deployment.sha,
+      transient_environment: deployment.transient_environment,
       description: inputs.description,
       task: inputs.task,
-      transient_environment: deployment.transient_environment,
       // If the deployment is not deployed for a while, GitHub will show the below error.
       //   This branch had an error being deployed
       //   1 abandoned deployment
