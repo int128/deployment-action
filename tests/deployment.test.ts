@@ -2,7 +2,7 @@ import { it, expect } from 'vitest'
 import { WebhookEvent } from '@octokit/webhooks-types'
 import { DeploymentParameters, inferDeploymentParameters } from '../src/deployment.js'
 
-const partialPayload = (payload: object) => payload as WebhookEvent
+const partialPayloadForTest = (payload: object) => payload as WebhookEvent
 
 it('returns the pull request number', () => {
   const p = inferDeploymentParameters(
@@ -11,7 +11,7 @@ it('returns the pull request number', () => {
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
       sha: '1234567890abcdef',
-      payload: partialPayload({
+      payload: partialPayloadForTest({
         pull_request: {
           number: 123,
           head: {
@@ -38,7 +38,7 @@ it('returns the pull request number with suffix', () => {
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
       sha: '1234567890abcdef',
-      payload: partialPayload({
+      payload: partialPayloadForTest({
         pull_request: {
           number: 123,
           head: {
@@ -65,7 +65,7 @@ it('returns the pushed branch', () => {
       eventName: 'push',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
-      payload: partialPayload({}),
+      payload: partialPayloadForTest({}),
       workflow: 'test',
     },
     {},
@@ -84,7 +84,7 @@ it('returned the pushed tag', () => {
       eventName: 'push',
       ref: 'refs/tags/main',
       sha: '1234567890abcdef',
-      payload: partialPayload({}),
+      payload: partialPayloadForTest({}),
       workflow: 'test',
     },
     {},
@@ -103,7 +103,7 @@ it('returns the current branch on schedule event', () => {
       eventName: 'schedule',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
-      payload: partialPayload({}),
+      payload: partialPayloadForTest({}),
       workflow: 'deploy',
     },
     {},
