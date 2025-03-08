@@ -3,14 +3,14 @@ import * as core from '@actions/core'
 import * as github from './github.js'
 import { Octokit, RestEndpointMethodTypes } from '@octokit/action'
 
-export type DeploymentRequest = {
+export type DeploymentContext = {
   ref: string
   sha: string
   environment: string
   transient_environment?: boolean
 }
 
-export const inferDeploymentFromContext = (context: github.Context): DeploymentRequest => {
+export const inferDeploymentFromContext = (context: github.Context): DeploymentContext => {
   if ('pull_request' in context.payload) {
     return {
       // set the head ref to associate a deployment with the pull request
@@ -81,29 +81,29 @@ type CreateDeployment = {
   state: RestEndpointMethodTypes['repos']['createDeploymentStatus']['parameters']['state']
 }
 
-export const createDeployment = async (deployment: CreateDeployment, octokit: Octokit) => {
-  core.info(`Creating a deployment: ${JSON.stringify(deployment, undefined, 2)}`)
+export const createDeployment = async (req: CreateDeployment, octokit: Octokit) => {
+  core.info(`Creating a deployment: ${JSON.stringify(req, undefined, 2)}`)
   const created = await octokit.rest.repos.createDeployment({
-    owner: deployment.owner,
-    repo: deployment.repo,
-    ref: deployment.ref,
-    sha: deployment.sha,
-    environment: deployment.environment,
-    transient_environment: deployment.transient_environment,
-    description: deployment.description,
-    task: deployment.task,
+    owner: req.owner,
+    repo: req.repo,
+    ref: req.ref,
+    sha: req.sha,
+    environment: req.environment,
+    transient_environment: req.transient_environment,
+    description: req.description,
+    task: req.task,
     auto_merge: false,
     required_contexts: [],
   })
-  assert(created.status === 201)
+  assert.strictEqual(created.status, 201)
   core.info(`Created a deployment: ${created.data.url}`)
 
-  core.info(`Setting the deployment status to ${deployment.state}`)
+  core.info(`Setting the deployment status to ${req.state}`)
   const { data: deploymentStatus } = await octokit.rest.repos.createDeploymentStatus({
-    owner: deployment.owner,
-    repo: deployment.repo,
+    owner: req.owner,
+    repo: req.repo,
     deployment_id: created.data.id,
-    state: deployment.state,
+    state: req.state,
   })
   core.info(`Created a deployment status: ${deploymentStatus.url}`)
 

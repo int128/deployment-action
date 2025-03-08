@@ -1,12 +1,12 @@
 import { it, expect, describe } from 'vitest'
 import { WebhookEvent } from '@octokit/webhooks-types'
-import { DeploymentRequest, inferDeploymentFromContext } from '../src/deployment.js'
+import { DeploymentContext, inferDeploymentFromContext } from '../src/deployment.js'
 
 const partialPayloadForTest = (payload: object) => payload as WebhookEvent
 
 describe('inferDeploymentFromContext', () => {
   it('returns the pull request number', () => {
-    const p = inferDeploymentFromContext({
+    const deployment = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
@@ -21,7 +21,7 @@ describe('inferDeploymentFromContext', () => {
       }),
       workflow: 'test',
     })
-    expect(p).toStrictEqual<DeploymentRequest>({
+    expect(deployment).toStrictEqual<DeploymentContext>({
       ref: 'headname',
       sha: '1234567890abcdef',
       environment: 'pr-123',
@@ -30,7 +30,7 @@ describe('inferDeploymentFromContext', () => {
   })
 
   it('returns the pushed branch', () => {
-    const p = inferDeploymentFromContext({
+    const deployment = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/heads/main',
@@ -38,7 +38,7 @@ describe('inferDeploymentFromContext', () => {
       payload: partialPayloadForTest({}),
       workflow: 'test',
     })
-    expect(p).toStrictEqual<DeploymentRequest>({
+    expect(deployment).toStrictEqual<DeploymentContext>({
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
       environment: 'main',
@@ -46,7 +46,7 @@ describe('inferDeploymentFromContext', () => {
   })
 
   it('returned the pushed tag', () => {
-    const p = inferDeploymentFromContext({
+    const deployment = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/tags/main',
@@ -54,7 +54,7 @@ describe('inferDeploymentFromContext', () => {
       payload: partialPayloadForTest({}),
       workflow: 'test',
     })
-    expect(p).toStrictEqual<DeploymentRequest>({
+    expect(deployment).toStrictEqual<DeploymentContext>({
       ref: 'refs/tags/main',
       sha: '1234567890abcdef',
       environment: 'tags/main',
@@ -62,7 +62,7 @@ describe('inferDeploymentFromContext', () => {
   })
 
   it('returns the current branch on schedule event', () => {
-    const p = inferDeploymentFromContext({
+    const deployment = inferDeploymentFromContext({
       repo: { owner: 'owner', repo: 'repo' },
       eventName: 'schedule',
       ref: 'refs/heads/main',
@@ -70,7 +70,7 @@ describe('inferDeploymentFromContext', () => {
       payload: partialPayloadForTest({}),
       workflow: 'deploy',
     })
-    expect(p).toStrictEqual<DeploymentRequest>({
+    expect(deployment).toStrictEqual<DeploymentContext>({
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
       environment: 'deploy/schedule',
