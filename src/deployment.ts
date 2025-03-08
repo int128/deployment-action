@@ -1,4 +1,4 @@
-import { Context } from './github.js'
+import * as github from './github.js'
 
 export type DeploymentInputs = {
   environment?: string
@@ -12,7 +12,7 @@ export type DeploymentParameters = {
   transient_environment?: boolean
 }
 
-export const inferDeploymentParameters = (context: Context, inputs: DeploymentInputs): DeploymentParameters => {
+export const inferDeploymentParameters = (context: github.Context, inputs: DeploymentInputs): DeploymentParameters => {
   const p = infer(context)
   return {
     ...p,
@@ -20,7 +20,7 @@ export const inferDeploymentParameters = (context: Context, inputs: DeploymentIn
   }
 }
 
-const infer = (context: Context): DeploymentParameters => {
+const infer = (context: github.Context): DeploymentParameters => {
   if ('pull_request' in context.payload) {
     return {
       // set the head ref to associate a deployment with the pull request
