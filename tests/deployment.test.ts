@@ -1,21 +1,24 @@
 import { it, expect } from 'vitest'
+import { WebhookEvent } from '@octokit/webhooks-types'
 import { DeploymentParameters, inferDeploymentParameters } from '../src/deployment.js'
+
+const partialPayloadForTest = (payload: object) => payload as WebhookEvent
 
 it('returns the pull request number', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
       sha: '1234567890abcdef',
-      payload: {
-        number: 123,
+      payload: partialPayloadForTest({
         pull_request: {
           number: 123,
           head: {
             ref: 'headname',
           },
         },
-      },
+      }),
       workflow: 'test',
     },
     {},
@@ -31,18 +34,18 @@ it('returns the pull request number', () => {
 it('returns the pull request number with suffix', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'pull_request',
       ref: 'refs/pulls/123/merge',
       sha: '1234567890abcdef',
-      payload: {
-        number: 123,
+      payload: partialPayloadForTest({
         pull_request: {
           number: 123,
           head: {
             ref: 'headname',
           },
         },
-      },
+      }),
       workflow: 'test',
     },
     { environmentSuffix: '/app1' },
@@ -58,10 +61,11 @@ it('returns the pull request number with suffix', () => {
 it('returns the pushed branch', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
-      payload: {},
+      payload: partialPayloadForTest({}),
       workflow: 'test',
     },
     {},
@@ -76,10 +80,11 @@ it('returns the pushed branch', () => {
 it('returned the pushed tag', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'push',
       ref: 'refs/tags/main',
       sha: '1234567890abcdef',
-      payload: {},
+      payload: partialPayloadForTest({}),
       workflow: 'test',
     },
     {},
@@ -94,10 +99,11 @@ it('returned the pushed tag', () => {
 it('returns the current branch on schedule event', () => {
   const p = inferDeploymentParameters(
     {
+      repo: { owner: 'owner', repo: 'repo' },
       eventName: 'schedule',
       ref: 'refs/heads/main',
       sha: '1234567890abcdef',
-      payload: {},
+      payload: partialPayloadForTest({}),
       workflow: 'deploy',
     },
     {},
