@@ -1,7 +1,7 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import * as core from '@actions/core'
-import * as github from './github.js'
-import { Octokit, RestEndpointMethodTypes } from '@octokit/action'
+import type { Octokit, RestEndpointMethodTypes } from '@octokit/action'
+import type * as github from './github.js'
 
 export type DeploymentContext = {
   ref: string
@@ -21,7 +21,7 @@ export const inferDeploymentFromContext = (context: github.Context): DeploymentC
     }
   }
 
-  if (context.eventName == 'push') {
+  if (context.eventName === 'push') {
     return {
       ref: context.ref,
       sha: context.sha,
