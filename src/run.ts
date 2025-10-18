@@ -1,6 +1,6 @@
-import * as github from './github.js'
-import { Octokit } from '@octokit/action'
+import type { Octokit } from '@octokit/action'
 import { createDeployment, deleteExistingDeployments, inferDeploymentFromContext } from './deployment.js'
+import type * as github from './github.js'
 
 type Inputs = {
   environment?: string

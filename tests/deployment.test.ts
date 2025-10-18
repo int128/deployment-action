@@ -1,6 +1,6 @@
-import { it, expect, describe } from 'vitest'
-import { WebhookEvent } from '@octokit/webhooks-types'
-import { DeploymentContext, inferDeploymentFromContext } from '../src/deployment.js'
+import type { WebhookEvent } from '@octokit/webhooks-types'
+import { describe, expect, it } from 'vitest'
+import { type DeploymentContext, inferDeploymentFromContext } from '../src/deployment.js'
 
 const partialPayloadForTest = (payload: object) => payload as WebhookEvent
 
